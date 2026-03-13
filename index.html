@@ -112,9 +112,17 @@
   .big-progress-fill { height: 100%; background: linear-gradient(90deg, var(--pink), var(--pink-light)); border-radius: 100px; transition: width 0.6s ease; }
   .big-progress-pct { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.1rem; color: var(--pink); white-space: nowrap; }
 
+  /* BONUS SECTION */
+  .bonus-section { background: var(--black); border-radius: 20px; padding: 28px 32px; margin-top: 28px; display: flex; align-items: center; gap: 20px; position: relative; overflow: hidden; }
+  .bonus-section::before { content: ''; position: absolute; top: -40px; right: -40px; width: 180px; height: 180px; background: var(--pink); border-radius: 50%; opacity: 0.15; filter: blur(40px); }
+  .bonus-badge { background: var(--pink); color: var(--white); font-size: 0.68rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 5px 12px; border-radius: 100px; white-space: nowrap; flex-shrink: 0; align-self: flex-start; margin-top: 4px; }
+  .bonus-section h3 { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.1rem; color: var(--white); margin-bottom: 6px; position: relative; z-index: 1; }
+  .bonus-section p { color: rgba(255,255,255,0.6); font-size: 0.88rem; line-height: 1.55; margin-bottom: 14px; position: relative; z-index: 1; }
+  .bonus-body { position: relative; z-index: 1; }
+
   @keyframes fadeDown { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-  @media (max-width: 580px) { .page { padding: 28px 16px 60px; } .hero { padding: 30px 22px; } .home-hero { padding: 36px 24px; } .card-grid { grid-template-columns: 1fr; } .days-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 580px) { .page { padding: 28px 16px 60px; } .hero { padding: 30px 22px; } .home-hero { padding: 36px 24px; } .card-grid { grid-template-columns: 1fr; } .days-grid { grid-template-columns: repeat(3, 1fr); } .bonus-section { flex-direction: column; gap: 14px; } }
 </style>
 </head>
 <body>
@@ -682,6 +690,17 @@ function renderHome() {
     });
     html += `</div>`;
   });
+
+  html += `
+    <div class="bonus-section">
+      <div class="bonus-badge">🎁 Free Bonus</div>
+      <div class="bonus-body">
+        <h3>Your Free Bonus Resource</h3>
+        <p>A Canva toolkit included with your blueprint — templates and assets ready to customize.</p>
+        <a href="https://www.canva.com/design/DAHAlCT6kfU/7k2vEE9Y8uraDA7-t-Xn3g/view?utm_content=DAHAlCT6kfU&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=he9aa85810f" target="_blank" class="btn btn-primary">Access Your Free Bonus →</a>
+      </div>
+    </div>
+  `;
 
   html += `</div>`;
   document.getElementById('homeScreen').innerHTML = html;
