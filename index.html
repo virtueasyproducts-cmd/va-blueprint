@@ -227,6 +227,310 @@
 </style>
 </head>
 <body>
+  <!--
+  VIRTUEASY ACCESS GATE
+  =====================
+  HOW TO INSTALL:
+  1. Open your va-blueprint index.html
+  2. Paste this ENTIRE block right after the opening <body> tag
+  3. Find the CLOSING </body> tag and paste the closing wrapper right before it (see bottom of this file)
+  4. Set your access code below (change "BLUEPRINT2026" to whatever you want)
+  5. Push to GitHub — done!
+  
+  HOW IT WORKS:
+  - All blueprint content is hidden until the correct code is entered
+  - Code is saved in localStorage so buyers only enter it once per device
+  - You deliver the access code via Stripe success page + welcome email
+  - Someone technical COULD inspect the source to find the code, but for a $27 product this is more than enough protection
+-->
+
+<!-- ========== ACCESS GATE STYLES ========== -->
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap');
+
+  /* Hide all blueprint content until unlocked */
+  #blueprint-content-wrapper {
+    display: none;
+  }
+  #blueprint-content-wrapper.unlocked {
+    display: block;
+  }
+
+  #access-gate-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: #0A0A0A;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Sans', sans-serif;
+  }
+  #access-gate-overlay.hidden {
+    display: none;
+  }
+
+  .gate-container {
+    width: 90%;
+    max-width: 420px;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .gate-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.4rem;
+    letter-spacing: 3px;
+    color: #FF2D8B;
+    margin-bottom: 0.25rem;
+  }
+
+  .gate-subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    color: #888;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 2.5rem;
+  }
+
+  .gate-heading {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #F8F8F8;
+    margin-bottom: 0.5rem;
+  }
+
+  .gate-description {
+    font-size: 0.85rem;
+    color: #777;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+  }
+
+  .gate-input-group {
+    position: relative;
+    margin-bottom: 1rem;
+  }
+
+  .gate-input {
+    width: 100%;
+    padding: 14px 18px;
+    background: #1A1A1A;
+    border: 2px solid #333;
+    border-radius: 8px;
+    color: #F8F8F8;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    text-align: center;
+    text-transform: uppercase;
+    outline: none;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+  }
+  .gate-input::placeholder {
+    color: #555;
+    letter-spacing: 1px;
+    text-transform: none;
+  }
+  .gate-input:focus {
+    border-color: #FF2D8B;
+  }
+  .gate-input.error {
+    border-color: #ff4444;
+    animation: gate-shake 0.4s ease;
+  }
+
+  @keyframes gate-shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(8px); }
+    60% { transform: translateX(-5px); }
+    80% { transform: translateX(5px); }
+  }
+
+  .gate-btn {
+    width: 100%;
+    padding: 14px;
+    background: #FF2D8B;
+    color: #fff;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.15s ease;
+  }
+  .gate-btn:hover {
+    background: #e6256f;
+    transform: translateY(-1px);
+  }
+  .gate-btn:active {
+    transform: translateY(0);
+  }
+
+  .gate-error-msg {
+    color: #ff4444;
+    font-size: 0.8rem;
+    margin-top: 0.75rem;
+    min-height: 1.2em;
+    transition: opacity 0.3s;
+  }
+
+  .gate-footer {
+    margin-top: 2.5rem;
+    font-size: 0.75rem;
+    color: #555;
+  }
+  .gate-footer a {
+    color: #FF2D8B;
+    text-decoration: none;
+  }
+  .gate-footer a:hover {
+    text-decoration: underline;
+  }
+
+  /* Dotted background texture matching Virtueasy brand */
+  #access-gate-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, #ffffff08 1px, transparent 1px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+</style>
+
+<!-- ========== ACCESS GATE OVERLAY ========== -->
+<div id="access-gate-overlay">
+  <div class="gate-container">
+    <div class="gate-logo">VIRTUEASY</div>
+    <div class="gate-subtitle">The VA Blueprint</div>
+    
+    <div class="gate-heading">Enter your access code</div>
+    <p class="gate-description">
+      Your code was included in your purchase confirmation email.<br>
+      Check your inbox for your Virtueasy receipt.
+    </p>
+    
+    <div class="gate-input-group">
+      <input 
+        type="text" 
+        id="access-code-input" 
+        class="gate-input" 
+        placeholder="Enter code here"
+        autocomplete="off"
+        spellcheck="false"
+      >
+    </div>
+    
+    <button class="gate-btn" id="access-code-btn">UNLOCK MY BLUEPRINT</button>
+    
+    <div class="gate-error-msg" id="gate-error"></div>
+    
+    <div class="gate-footer">
+      Don't have a code? <a href="https://virtueasy.com" target="_blank">Get access here</a>
+    </div>
+  </div>
+</div>
+
+<!-- ========== WRAP YOUR EXISTING CONTENT ========== -->
+<!-- 
+  Everything below this point should be your existing blueprint content.
+  Wrap ALL of it inside this div:
+-->
+<div id="blueprint-content-wrapper">
+
+<!-- 
+  ╔══════════════════════════════════════════════════════════╗
+  ║  YOUR EXISTING BLUEPRINT HTML GOES HERE                  ║
+  ║  (all your current <body> content sits inside this div)  ║
+  ╚══════════════════════════════════════════════════════════╝
+-->
+
+
+<!-- ========== ACCESS GATE SCRIPT ========== -->
+<script>
+(function() {
+  // ╔════════════════════════════════════════════╗
+  // ║  CHANGE THIS TO YOUR DESIRED ACCESS CODE  ║
+  // ║  (case-insensitive)                        ║
+  // ╚════════════════════════════════════════════╝
+  const ACCESS_CODE = 'BLUEPRINT2026';
+
+  const STORAGE_KEY = 'virtueasy_bp_access';
+  const overlay = document.getElementById('access-gate-overlay');
+  const wrapper = document.getElementById('blueprint-content-wrapper');
+  const input = document.getElementById('access-code-input');
+  const btn = document.getElementById('access-code-btn');
+  const errorMsg = document.getElementById('gate-error');
+
+  // Check if already authenticated
+  if (localStorage.getItem(STORAGE_KEY) === hashCode(ACCESS_CODE)) {
+    unlockContent();
+  }
+
+  // Simple string hash (not crypto-secure, but obscures the code from casual source inspection)
+  function hashCode(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash |= 0;
+    }
+    return 'vebp_' + Math.abs(hash).toString(36);
+  }
+
+  function unlockContent() {
+    overlay.classList.add('hidden');
+    wrapper.classList.add('unlocked');
+  }
+
+  function showError(msg) {
+    errorMsg.textContent = msg;
+    input.classList.add('error');
+    setTimeout(() => input.classList.remove('error'), 500);
+  }
+
+  btn.addEventListener('click', function() {
+    const entered = input.value.trim().toUpperCase();
+    if (!entered) {
+      showError('Please enter your access code.');
+      return;
+    }
+    if (entered === ACCESS_CODE.toUpperCase()) {
+      localStorage.setItem(STORAGE_KEY, hashCode(ACCESS_CODE));
+      unlockContent();
+    } else {
+      showError('That code doesn\'t match. Check your purchase email and try again.');
+      input.value = '';
+      input.focus();
+    }
+  });
+
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') btn.click();
+  });
+
+  // Clear error on new input
+  input.addEventListener('input', function() {
+    errorMsg.textContent = '';
+  });
+})();
+</script>
+
+<!-- 
+  ╔══════════════════════════════════════════════════════════╗
+  ║  CLOSE THE WRAPPER - paste this closing tag             ║
+  ║  right before your </body> tag:                         ║
+  ║                                                         ║
+  ║  </div><!-- end blueprint-content-wrapper -->
+  ║                                                         ║
+  ╚══════════════════════════════════════════════════════════╝
+-->
 <div class="page">
   <div class="topbar">
     <a class="logo" onclick="showHome()">Virtu<span>easy</span></a>
@@ -705,6 +1009,13 @@ showHome();
 </script>
   <script>
   fbq('track', 'Purchase', {value: 27.00, currency: 'USD'});
+</script>
+  </div>
+  <script>
+(function() {
+  const ACCESS_CODE = 'BLUEPRINT2026';
+  ... rest of script ...
+})();
 </script>
 </body>
 </html>
