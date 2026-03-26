@@ -485,16 +485,7 @@
   });
 })();
 </script>
-
-<!-- 
-  ╔══════════════════════════════════════════════════════════╗
-  ║  CLOSE THE WRAPPER - paste this closing tag             ║
-  ║  right before your </body> tag:                         ║
-  ║                                                         ║
-  ║  </div><!-- end blueprint-content-wrapper -->
-  ║                                                         ║
-  ╚══════════════════════════════════════════════════════════╝
--->
+  <div id="blueprint-content-wrapper">
 <div class="page">
   <div class="topbar">
     <a class="logo" onclick="showHome()">Virtu<span>easy</span></a>
@@ -975,10 +966,56 @@ showHome();
   fbq('track', 'Purchase', {value: 27.00, currency: 'USD'});
 </script>
   </div>
-  <script>
+<script>
 (function() {
   const ACCESS_CODE = 'BLUEPRINT2026';
-  ... rest of script ...
+  const STORAGE_KEY = 'virtueasy_bp_access';
+  const overlay = document.getElementById('access-gate-overlay');
+  const wrapper = document.getElementById('blueprint-content-wrapper');
+  const input = document.getElementById('access-code-input');
+  const btn = document.getElementById('access-code-btn');
+  const errorMsg = document.getElementById('gate-error');
+
+  function hashCode(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash |= 0;
+    }
+    return 'vebp_' + Math.abs(hash).toString(36);
+  }
+
+  function unlockContent() {
+    overlay.classList.add('hidden');
+    wrapper.classList.add('unlocked');
+  }
+
+  function showError(msg) {
+    errorMsg.textContent = msg;
+    input.classList.add('error');
+    setTimeout(() => input.classList.remove('error'), 500);
+  }
+
+  if (localStorage.getItem(STORAGE_KEY) === hashCode(ACCESS_CODE)) {
+    unlockContent();
+  }
+
+  btn.addEventListener('click', function() {
+    const entered = input.value.trim().toUpperCase();
+    if (!entered) { showError('Please enter your access code.'); return; }
+    if (entered === ACCESS_CODE.toUpperCase()) {
+      localStorage.setItem(STORAGE_KEY, hashCode(ACCESS_CODE));
+      unlockContent();
+    } else {
+      showError("That code doesn't match. Check your purchase confirmation and try again.");
+      input.value = '';
+      input.focus();
+    }
+  });
+
+  input.addEventListener('keydown', function(e) { if (e.key === 'Enter') btn.click(); });
+  input.addEventListener('input', function() { errorMsg.textContent = ''; });
 })();
 </script>
 </body>
