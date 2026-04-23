@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Meta Pixel -->
-<script>
+  <script>
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
 n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -17,7 +16,7 @@ fbq('track', 'PageView');
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The VA Blueprint — 30 Days to Your First High-Ticket Client</title>
+<title>The 30-Day VA System — 30 Days to Your First High-Ticket Client</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
@@ -241,8 +240,8 @@ fbq('track', 'PageView');
   }
 
   /* ========== ACCESS GATE STYLES ========== */
-  #blueprint-content-wrapper { display: none; }
-  #blueprint-content-wrapper.unlocked { display: block; }
+  #system-content-wrapper { display: none; }
+  #system-content-wrapper.unlocked { display: block; }
   #access-gate-overlay {
     position: fixed; inset: 0; z-index: 99999; background: #0A0A0A;
     display: flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif;
@@ -286,11 +285,10 @@ fbq('track', 'PageView');
 </head>
 <body>
 
-<!-- ========== ACCESS GATE OVERLAY ========== -->
 <div id="access-gate-overlay">
   <div class="gate-container">
     <div class="gate-logo">VIRTUEASY</div>
-    <div class="gate-subtitle">The VA Blueprint</div>
+    <div class="gate-subtitle">The 30-Day VA System</div>
     <div class="gate-heading">Enter your access code</div>
     <p class="gate-description">
       Your code was on the confirmation page after checkout.<br>
@@ -299,7 +297,7 @@ fbq('track', 'PageView');
     <div class="gate-input-group">
       <input type="text" id="access-code-input" class="gate-input" placeholder="Enter code here" autocomplete="off" spellcheck="false">
     </div>
-    <button class="gate-btn" id="access-code-btn">UNLOCK MY BLUEPRINT</button>
+    <button class="gate-btn" id="access-code-btn">UNLOCK MY 30-DAY VA SYSTEM</button>
     <div class="gate-error-msg" id="gate-error"></div>
     <div class="gate-footer">
       Don't have a code? <a href="https://virtueasy.com" target="_blank">Get access here</a>
@@ -307,8 +305,7 @@ fbq('track', 'PageView');
   </div>
 </div>
 
-<!-- ========== BLUEPRINT CONTENT (hidden until unlocked) ========== -->
-<div id="blueprint-content-wrapper">
+<div id="system-content-wrapper">
 
 <div class="page">
   <div class="topbar">
@@ -687,10 +684,10 @@ function downloadNotes(dayIndex) {
     taskLines.push((taskEls[i].classList.contains('done')?'[x]':'[ ]')+' '+taskEls[i].querySelector('.task-text').textContent.trim());
   }
   var journal = document.getElementById('journalEntry').value || '(no notes written yet)';
-  var content = 'THE VA BLUEPRINT — Day '+(dayIndex+1)+' Notes\n'+'='.repeat(44)+'\n\nDAY TITLE: '+d.title+'\n\nTASKS:\n'+taskLines.join('\n')+'\n\nJOURNAL PROMPT:\n'+d.prompt+'\n\nMY ANSWER:\n'+journal+'\n\nDate saved: '+new Date().toLocaleDateString();
+  var content = 'THE 30-DAY VA SYSTEM — Day '+(dayIndex+1)+' Notes\n'+'='.repeat(44)+'\n\nDAY TITLE: '+d.title+'\n\nTASKS:\n'+taskLines.join('\n')+'\n\nJOURNAL PROMPT:\n'+d.prompt+'\n\nMY ANSWER:\n'+journal+'\n\nDate saved: '+new Date().toLocaleDateString();
   var a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([content],{type:'text/plain'}));
-  a.download = 'VA-Blueprint-Day'+(dayIndex+1)+'-Notes.txt';
+  a.download = '30-Day-VA-System-Day'+(dayIndex+1)+'-Notes.txt';
   a.click();
 }
 
@@ -700,15 +697,12 @@ showHome();
   fbq('track', 'Purchase', {value: 27.00, currency: 'USD'});
 </script>
 
-</div><!-- end blueprint-content-wrapper -->
-
-<!-- ========== ACCESS GATE SCRIPT ========== -->
-<script>
+</div><script>
 (function() {
   var ACCESS_CODE = 'BLUEPRINT2026';
   var STORAGE_KEY = 'virtueasy_bp_access';
   var overlay = document.getElementById('access-gate-overlay');
-  var wrapper = document.getElementById('blueprint-content-wrapper');
+  var wrapper = document.getElementById('system-content-wrapper');
   var input = document.getElementById('access-code-input');
   var btn = document.getElementById('access-code-btn');
   var errorMsg = document.getElementById('gate-error');
